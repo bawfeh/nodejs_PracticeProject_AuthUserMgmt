@@ -35,7 +35,14 @@ const authenticatedUser = (username, password) => {
 
 const app = express();
 
-app.use(session({secret:"fingerpint"},resave=true,saveUninitialized=true));
+// app.use(session({secret:"fingerpint"},resave=true,saveUninitialized=true));
+
+app.use(session({
+  secret: 'your-secret-key',
+  resave: true,              // ✅ Add this
+  saveUninitialized: true,   // ✅ Recommended
+  // cookie: { secure: false }   // true if using HTTPS
+}));
 
 app.use(express.json());
 
@@ -74,7 +81,7 @@ app.post("/login", (req, res) => {
         // Generate JWT access token
         let accessToken = jwt.sign({
             data: password
-        }, 'access', { expiresIn: 60 * 60 });
+        }, 'access', { expiresIn: 60 * 10 });
 
         // Store access token and username in session
         req.session.authorization = {
@@ -82,7 +89,7 @@ app.post("/login", (req, res) => {
         }
         return res.status(200).send("User successfully logged in");
     } else {
-        return res.status(208).json({ message: "Invalid Login. Check username and password" });
+        return res.status(208).json({ message: "Invalid Login. Check username and password: " + "(" + username + ", " + password + ")" });
     }
 });
 

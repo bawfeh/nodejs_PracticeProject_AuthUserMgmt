@@ -5,7 +5,7 @@ const router = express.Router();
 let friends = {
     "johnsmith@gamil.com": {"firstName": "John","lastName": "Doe","DOB":"22-12-1990"},
     "annasmith@gamil.com":{"firstName": "Anna","lastName": "smith","DOB":"02-07-1983"},
-    "peterjones@gamil.com":{"firstName": "Peter","lastName": "Jones","DOB":"21-03-1989"}
+    "peterjones@gmail.com":{"firstName": "Peter","lastName": "Jones","DOB":"21-03-1989"}
 };
 
 
@@ -19,7 +19,11 @@ router.get("/",(req,res)=>{
 router.get("/:email",(req,res)=>{
   // Retrieve the email parameter from the request URL and send the corresponding friend's details
   const email = req.params.email;
-  res.send(friends[email])//This line is to be replaced with actual return value
+  if (friends[email]) {
+    res.send(friends[email])//This line is to be replaced with actual return value
+  } else {
+    res.send(`No friend with email ${email}!`);
+  }
 });
 
 
